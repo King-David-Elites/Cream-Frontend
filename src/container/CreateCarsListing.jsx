@@ -7,6 +7,7 @@ import FileBase64 from "react-file-base64";
 import axiosRequest from "@/services/axiosConfig";
 import Loader from "@/AtomicComponents/Loader/Loader";
 import { useRouter } from "next/router";
+import { success } from "@/services/toaster";
 
 const CreateCarListing = () => {
   const [valid, setValid] = useState(false);
@@ -27,20 +28,25 @@ const CreateCarListing = () => {
   const [userListings, setUserListings] = useState({
     title: "",
     location: "",
-    locationISO: "",
-    category: "cars",
+    //locationISO: "",
+    attachedDocuments: [""],
+    category: "640e4a13975b9d627cbc5e51",
     description: "",
     forRent: false,
     images: images,
     videos: videos,
     price: "",
     year: new Date().getFullYear(),
-    carCondition: "New",
-    engineType: "",
-    colour: "",
-    features: "",
+    //carCondition: "New",
+    //engineType: "",
+    //color: "",
+    features: [],
     model: "",
   });
+
+  useEffect(() => {
+    console.log("form:", userListings);
+  }, [userListings.forRent]);
 
   useEffect(() => {
     setLoadImage(loadImage);
@@ -120,9 +126,9 @@ const CreateCarListing = () => {
   };
 
   const acceptNumbersOnly = (name, value) => {
-    var numeric = /^[0-9,]+$/;    
-    if (numeric.test(value)  && value >= 0) {     
-      console.log("yea")
+    var numeric = /^[0-9,]+$/;
+    if (numeric.test(value) && value >= 0) {
+      console.log("yea");
       setUserListings({ ...userListings, [name]: formatedPrice(value) });
       setChanging(!changing);
     }
@@ -131,20 +137,34 @@ const CreateCarListing = () => {
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    if (name === "price") {    
-       let price = parseInt(value.replace(/,/g, "")) || 0;  
+    if (name === "price") {
+      let price = parseInt(value.replace(/,/g, "")) || 0;
       acceptNumbersOnly(name, price);
     } else {
       setUserListings({ ...userListings, [name]: value });
       setChanging(!changing);
     }
   };
+  const priceAsInteger = (price) => parseInt(price, 10); // 10 is the radix (base) for the conversion
+  const category_id = {
+    "Real Estate": "640e4a12975b9d627cbc5e4f",
+    Automobile: "640e4a13975b9d627cbc5e51",
+  };
 
   const postUserListings = async (userListings) => {
     await axiosRequest
-      .post(`listings/upload-list`, userListings, setConfig())
+      .post(
+        `/listing`,
+        {
+          ...userListings,
+          price: priceAsInteger(userListings.price),
+          features: [userListings.features],
+        },
+        setConfig()
+      )
       .then((resp) => {
         setLoader(false);
+        success("response.data.message");
         navigate.push("/profile");
       })
       .catch((err) => {
@@ -209,7 +229,8 @@ const CreateCarListing = () => {
         <div className="section">
           <hr />
         </div>
-        {/* <p>Car Condition</p>
+        {/* 
+        <p>Car Condition</p>
         <div className="NumbB">
           <div className="sec">
             <select name="carCondition" required onChange={handleChange}>
@@ -229,7 +250,7 @@ const CreateCarListing = () => {
             />
           </div>
         </div>
-        <p>Colour</p>
+        <p>Color</p>
         <div className="NumbB">
           <div className="sec">
             <input type="text" name="colour" required onChange={handleChange} />
@@ -294,14 +315,18 @@ const CreateCarListing = () => {
                   name="images"
                   defaultValue={userListings.images}
                   multiple={true}
-                  onDone={(base64) => {
+                  onDone={(base64Array) => {
                     setSize(0);
-                    base64.forEach((item) => {
+                    base64Array.forEach((item) => {
                       setSize(size + item.file["size"]);
-                      setLoaded(!loaded);
                     });
-                    setAllImages(base64);
-                    setLoadImage(true);
+                    const imagesArray = base64Array.map((item) => ({
+                      base64: item.base64,
+                    }));
+                    console.log("images array", imagesArray);
+                    setImages((prevImages) => [...prevImages, ...imagesArray]);
+                    setAllImages(base64Array);
+                    setChanging(!changing);
                   }}
                 />
               </div>
@@ -310,24 +335,22 @@ const CreateCarListing = () => {
           <div className="chosenImages">
             {images.map((image) => {
               return (
-                <>
-                  <div className="imgCont">
-                    <img src={image.base64} alt="listedImage" />
-                    <div
-                      className="close"
-                      onClick={() => {
-                        setImages((images) => {
-                          return images.filter(
-                            (item) => item.base64 !== image.base64
-                          );
-                        });
-                        setChanging(!changing);
-                      }}
-                    >
-                      <X color="black" width="15px" />
-                    </div>
+                <div className="imgCont">
+                  <img src={image.base64} alt="listedImage" />
+                  <div
+                    className="close"
+                    onClick={() => {
+                      setImages((images) => {
+                        return images.filter(
+                          (item) => item.base64 !== image.base64
+                        );
+                      });
+                      setChanging(!changing);
+                    }}
+                  >
+                    <X color="black" width="15px" />
                   </div>
-                </>
+                </div>
               );
             })}
           </div>

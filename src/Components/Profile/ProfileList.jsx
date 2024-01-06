@@ -10,9 +10,10 @@ const ProfileList = ({ user }) => {
   const [listings, setListings] = useState([]);
 
   const getListings = useCallback(() => {
-    console.log(user._id);
+    console.log(user?._id);
+    console.log("user: ", user);
     axiosRequest
-      .get(`${globalApi}/listings/user-listing?id=${user._id}`, setConfig())
+      .get(`/${globalApi}/user/${user?._id}`, setConfig())
       .then((resp) => {
         setListings(resp.data);
         console.log(resp.data);

@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { RiArrowRightFill } from "react-icons/ri";
 import { useState } from "react";
-import PropertyRequest from "./PropertyRequestForm";
+
 
 const About = () => {
   const images = ["/i1.jpg", "pic10.jpg", "/i2.jpg", "i3.jpg"];

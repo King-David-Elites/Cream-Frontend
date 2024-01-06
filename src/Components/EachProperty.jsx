@@ -30,8 +30,8 @@ const EachProperty = () => {
 
   const fetchData = async (id) => {
     let data = await getAListing(id);
-    console.log(data);
-    setListing(data);
+    // console.log(data);
+    setListing(data?.data);
   };
 
   useEffect(() => {
@@ -80,8 +80,8 @@ const EachProperty = () => {
   //
   return (
     <>
-        <Nav active={listing?.category?.slug === "real-estate" ? 1 : 2} />
-      
+      <Nav active={listing?.category?.slug === "real-estate" ? 1 : 2} />
+
       <div className="h-0 w-0" ref={top}></div>
       {listing ? (
         <div className="mt-32 mx-xPadding text-center">
@@ -160,7 +160,7 @@ const EachProperty = () => {
                 >
                   View Media
                 </button>
-              </a>             
+              </a>
             </div>
           </div>
 
@@ -193,14 +193,20 @@ const EachProperty = () => {
                           " " +
                           listing?.postedBy.lastName}
                       </p>
-                      <p className="text-[0.8em]">{listing?.postedBy.address}</p>
+                      <p className="text-[0.8em]">
+                        {listing?.postedBy.address}
+                      </p>
                       <p>Joined 2023</p>
 
                       <div className="flex flex-wrap gap-3 w-full text-[0.8em]">
                         <a
                           href={`https://wa.me/${
                             "+234" + listing?.postedBy.phoneNumber1
-                          }?text=Hi%20${listing?.postedBy.firstName}%2C%20i%20am%20messaging%20you%20to%20request%20for%20this%20property%20-%20https%3A%2F%2Fcream.business%2Freal-estate%2F${listing?._id}`}
+                          }?text=Hi%20${
+                            listing?.postedBy.firstName
+                          }%2C%20i%20am%20messaging%20you%20to%20request%20for%20this%20property%20-%20https%3A%2F%2Fcream.business%2Freal-estate%2F${
+                            listing?._id
+                          }`}
                         >
                           <button className="py-2 px-3 bg-black rounded-md">
                             Send Message
@@ -239,19 +245,17 @@ const EachProperty = () => {
             )}
           </div>
         </div>
-      )
-      :
-
+      ) : (
         <div className="flex items-center justify-center py-32">
-              <SpinnerCircular
-                  color="white"
-                  className="flex justify-center"
-                  secondaryColor={"#F2BE5C"}
-                  size={50}
-                  thickness={150}
-                />
-              </div>
-      }
+          <SpinnerCircular
+            color="white"
+            className="flex justify-center"
+            secondaryColor={"#F2BE5C"}
+            size={50}
+            thickness={150}
+          />
+        </div>
+      )}
       <Footer />
     </>
   );

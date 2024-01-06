@@ -2,7 +2,7 @@ import axios from "axios";
 import globalApi from "@/Components/api";
 import services from "@/ioc/services";
 
-const BASEURL = "https://king-david-elites.onrender.com";
+const BASEURL = "https://cream-v2.onrender.com/api/v2";
 
 // """http://localhost:9099"
 

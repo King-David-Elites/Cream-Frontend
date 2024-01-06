@@ -12,6 +12,7 @@ import {
   RiUser2Fill,
   RiWallet2Fill,
   RiBuilding2Fill,
+  RiEdit2Fill,
 } from "react-icons/ri";
 import { HiUserGroup, HiX } from "react-icons/hi";
 import Line from "./Line";
@@ -50,6 +51,11 @@ const Nav = ({ active = 0 }) => {
     {
       name: "REQUESTS",
       link: "/propertyRequests",
+      icon: null,
+    },
+    {
+      name: "BLOG",
+      link: "/blog",
       icon: null,
     },
   ];
@@ -108,13 +114,18 @@ const Nav = ({ active = 0 }) => {
       icon: <RiContactsFill />,
       link: "/contact-us",
     },
+    {
+      name: "Blog",
+      icon: <RiEdit2Fill />,
+      link: "/blog",
+    },
   ];
 
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     setLoggedIn(validateLoggedIn);
-  },[]);
+  }, []);
   return (
     <div className="bg-black text-white w-full flex justify-between py-3 px-xPadding items-center fixed top-0 left-0 right-0 z-40">
       <a href="/">

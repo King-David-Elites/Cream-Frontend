@@ -8,6 +8,7 @@ import FileBase64 from "react-file-base64";
 import axiosRequest from "@/services/axiosConfig";
 import Loader from "@/AtomicComponents/Loader/Loader";
 import { useRouter } from "next/router";
+import { success } from "@/services/toaster";
 
 const CreateRealEstateListing = () => {
   const [outDoorProp, setOutDoorProp] = useState([]);
@@ -34,7 +35,7 @@ const CreateRealEstateListing = () => {
     title: "",
     location: "",
     locationISO: "",
-    category: "real-estate",
+    category: "640e4a12975b9d627cbc5e4f",
     description: "",
     forRent: false,
     images: images,
@@ -48,6 +49,7 @@ const CreateRealEstateListing = () => {
     model: "",
     noOfBed: 0,
     noOfBathroom: 0,
+    attachedDocuments: [""],
   });
 
   useEffect(() => {
@@ -127,9 +129,9 @@ const CreateRealEstateListing = () => {
   };
 
   const acceptNumbersOnly = (name, value) => {
-    var numeric = /^[0-9,]+$/;  
-    if (numeric.test(value)  && value >= 0) {     
-      console.log("yea")
+    var numeric = /^[0-9,]+$/;
+    if (numeric.test(value) && value >= 0) {
+      console.log("yea");
       setUserListings({ ...userListings, [name]: formatedPrice(value) });
       setChanging(!changing);
     }
@@ -138,8 +140,8 @@ const CreateRealEstateListing = () => {
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    if (name === "price") {    
-       let price = parseInt(value.replace(/,/g, "")) || 0;  
+    if (name === "price") {
+      let price = parseInt(value.replace(/,/g, "")) || 0;
       acceptNumbersOnly(name, price);
     } else {
       setUserListings({ ...userListings, [name]: value });
@@ -147,17 +149,24 @@ const CreateRealEstateListing = () => {
     }
   };
 
+  const priceAsInteger = (price) => parseInt(price, 10);
   const postUserListings = async (userListings) => {
     await axiosRequest
-      .post(`/listings/upload-list`, userListings, setConfig())
+      .post(
+        `/listing`,
+        { ...userListings, price: priceAsInteger(userListings.price) },
+        setConfig()
+      )
       .then((resp) => {
         setLoader(false);
+        success("response.data.message");
+        console.log("response", resp.data);
         navigate.push("/profile");
       })
       .catch((err) => {
         setLoader(false);
         setPopUp(true);
-        console.log(err.data);
+        console.log(err);
       });
   };
 
@@ -165,6 +174,10 @@ const CreateRealEstateListing = () => {
     setLoader(true);
     postUserListings(userListings);
   };
+
+  useEffect(() => {
+    console.log("listing form:", userListings);
+  }, [userListings.forRent]);
 
   return (
     <>
@@ -420,14 +433,18 @@ const CreateRealEstateListing = () => {
                   name="images"
                   defaultValue={userListings.images}
                   multiple={true}
-                  onDone={(base64) => {
+                  onDone={(base64Array) => {
                     setSize(0);
-                    base64.forEach((item) => {
+                    base64Array.forEach((item) => {
                       setSize(size + item.file["size"]);
-                      setLoaded(!loaded);
                     });
-                    setAllImages(base64);
-                    setLoadImage(true);
+                    const imagesArray = base64Array.map((item) => ({
+                      base64: item.base64,
+                    }));
+                    console.log("images array", imagesArray);
+                    setImages((prevImages) => [...prevImages, ...imagesArray]);
+                    setAllImages(base64Array);
+                    setChanging(!changing);
                   }}
                 />
               </div>

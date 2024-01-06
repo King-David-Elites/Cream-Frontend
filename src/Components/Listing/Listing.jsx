@@ -19,10 +19,10 @@ const Listing = ({ list, type }) => {
   const saveListing = async () => {
     setId(id);
     await axios
-      .patch(`${globalApi}/listings/save/${id}`, id, setConfig())
+      .patch(`${globalApi}/listing/${id}`, id, setConfig())
       .then((resp) => {
         if (resp.data.status === 1) {
-          console.log(resp.data)
+          console.log(resp.data);
           services.toast.success("You liked this post");
         }
       })
@@ -31,7 +31,7 @@ const Listing = ({ list, type }) => {
 
   const unSaveListing = async () => {
     await axios
-      .patch(`${globalApi}/listings/save/${id}`, id, setConfig())
+      .patch(`${globalApi}/listing/${id}`, id, setConfig())
       .then((resp) => {
         if (resp.data.status === 0) {
           services.toast.success("You unlike this post");
@@ -76,17 +76,17 @@ const Listing = ({ list, type }) => {
           }
           className="btn"
         >
-          {
-            postedBy === userEmail ?
-              <div className="profile hidden">
-                <img src={list.postedBy.profilePicture} alt="" />
-                <h4>{truncate(fullName, 25)}</h4>
-              </div> : <div className="profile">
-                <img src={list.postedBy.profilePicture} alt="" />
-                <h4>{truncate(fullName, 25)}</h4>
-              </div>
-
-          }
+          {postedBy === userEmail ? (
+            <div className="profile hidden">
+              <img src={list.postedBy.profilePicture} alt="" />
+              <h4>{truncate(fullName, 25)}</h4>
+            </div>
+          ) : (
+            <div className="profile">
+              <img src={list.postedBy.profilePicture} alt="" />
+              <h4>{truncate(fullName, 25)}</h4>
+            </div>
+          )}
           {/* <div className="profile">
             <img src={list.postedBy.profilePicture} alt="" />
             <h4>{truncate(fullName, 25)}</h4>
@@ -130,25 +130,28 @@ const Listing = ({ list, type }) => {
       </div>
 
       <p className="title">{list.title}</p>
-      {
-        list.forRent === false ? <p className="price">&#x20A6; {list.price.toLocaleString()}</p> : <p className="price">&#x20A6; {list.price.toLocaleString()} /day</p>
-      }
-
+      {list.forRent === false ? (
+        <p className="price">&#x20A6; {list.price.toLocaleString()}</p>
+      ) : (
+        <p className="price">&#x20A6; {list.price.toLocaleString()} /day</p>
+      )}
 
       <p className="description">
         <LocationMarker size="16px" />{" "}
         {truncate(formatLocation(list.location), 40)}
       </p>
 
-      {
-        list.forRent === false ? <div
+      {list.forRent === false ? (
+        <div
           className="enquireNow"
           onClick={() => {
             redirect(id);
           }}
         >
           Enquire Now
-        </div> : <div
+        </div>
+      ) : (
+        <div
           className="enquireNow"
           onClick={() => {
             redirect(id);
@@ -156,7 +159,7 @@ const Listing = ({ list, type }) => {
         >
           Book Now
         </div>
-      }
+      )}
     </Container>
   );
 };

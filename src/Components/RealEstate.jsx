@@ -30,10 +30,10 @@ const RealEstate = () => {
   const fetchData = async () => {
     setLoading(true);
     let data = await getListingsPerPage(page, "real-estate");
-    console.log("data: ", data);
-    //console.log("total: ", data.number);
+    //console.log("data: ", data);
+    //console.log("total: ", data?.number);
     setListings(data.list);
-    setTotalData(data.number);
+    setTotalData(data?.number);
     setLoading(false);
   };
 
@@ -44,7 +44,7 @@ const RealEstate = () => {
   const submit = async () => {
     setLoading(true);
     let data = await sendQuery(text);
-    console.log(data);
+    //console.log(data);
     let data1 = data.map((item) => {
       item.postedBy = {
         firstName: item["postedBy.firstName"],
@@ -53,7 +53,7 @@ const RealEstate = () => {
       };
       return item;
     });
-    console.log(data1);
+    //console.log(data1);
     setListings(data);
     // setTotalData(data.number);
     setLoading(false);
@@ -129,7 +129,7 @@ const RealEstate = () => {
           <div className="w-full flexmm mt-10">
             <PaginationButtons
               range={[1, 2, 3]}
-              pagination={30}
+              pagination={10}
               page={page}
               setPage={setPage}
               loading={loading}

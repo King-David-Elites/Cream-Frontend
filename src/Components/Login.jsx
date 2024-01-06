@@ -1,7 +1,7 @@
 import { login } from "@/services/request";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Login = () => {
   const [details, setDetails] = useState({
@@ -13,7 +13,14 @@ const Login = () => {
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
+    console.log(details);
   };
+  //localStorage.setItem("token", "477cfa2f-6671-4290-a9da-0005bea78b64");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("token gotten:", token);
+  }, []);
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -41,7 +48,7 @@ const Login = () => {
         <form action="" className="flex w-full gap-5 flex-col">
           <input
             type="text"
-            placeholder="Enter your name here"
+            placeholder="Enter your Email here"
             name="email"
             value={details["email"]}
             onChange={handleChange}
@@ -69,7 +76,7 @@ const Login = () => {
         </form>
 
         <button
-          className="bg-primary1 w-full py-3 text-black rounded-md my-3"
+          className="bg-primary1 w-full py-3 text-black rounded-md outline-none my-3"
           onClick={submitForm}
         >
           Login

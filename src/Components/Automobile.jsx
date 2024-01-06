@@ -27,8 +27,8 @@ const Automobile = () => {
   const fetchData = async () => {
     setLoading(true);
     let data = await getListingsPerPage(page, "cars");
-    setListings(data.list);
-    setTotalData(data.number);
+    setListings(data?.list);
+    setTotalData(data?.number);
     setLoading(false);
   };
 
