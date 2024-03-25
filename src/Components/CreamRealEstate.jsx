@@ -88,7 +88,7 @@ function CreamRealEstate() {
     <>
       <Nav active={10} />
 
-      <>
+      {/* <>
         <h1 className="text-white text-[4em] sm:text-[40px] font-[700]">
           REAL <span className="text-primary1">ESTATE</span>
         </h1>
@@ -118,7 +118,7 @@ function CreamRealEstate() {
             Search <RiSearch2Line />{" "}
           </button>
         </div>
-      </>
+      </> */}
 
       <div className="list-container my-20 sm:my-14 mx-xPadding">
         <h3 className="text-center my-10 text[1.5em] font-[700]">{name}</h3>

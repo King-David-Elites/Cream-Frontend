@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import { getArticles } from "@/services/request";
 import { SpinnerCircular } from "spinners-react";
+import DOMPurify from "isomorphic-dompurify";
 
 const Blog = () => {
   const [articles, setArticles] = useState(null);
@@ -26,7 +27,7 @@ const Blog = () => {
 
   const images = ["/pic18.jpeg", "/pic19.png"];
 
-  useRouter().return(
+  return (
     <>
       <Nav active={6} />
       <DynamicBanner images={images}>
@@ -68,19 +69,22 @@ const Blog = () => {
               className="w-full gap-8 sm:gap-2 flex flex-row"
             >
               <div className=" w-[50%]">
-                <h1 className="text-[2em] sm:text-[1em] font-[700]">
+                <h1 className="text-[2em] sm:text-[1em] font-[700] line-clamp-1 sm:line-clamp-2">
                   {article.title}
                 </h1>
                 {/* <p className="text-gray-500">
                   posted on {new Date(article.createdAt).toLocaleString()}
                 </p> */}
-                <div className="overflow-hidden h-[12vw]">
-                  <p className="text-ellipsis sm:text-[0.8em]">
-                    {article.body}
-                  </p>
+                <div className="  ">
+                  <p
+                    className="text-ellipsis sm:text-[0.8em] line-clamp-6 sm:line-clamp-3"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(article.body),
+                    }}
+                  />
                 </div>
                 <Link href={`/blog/${article._id}`}>
-                  <button className="flex gap-2 items-center px-10 sm:px-6 py-3 mt-5 bg-primary1 text-black rounded-md sm:text-[0.8em]">
+                  <button className="flex gap-2 items-center px-10 sm:px-6 py-3 mt-5 sm:mt-3 bg-primary1 text-black rounded-md sm:text-[0.8em]">
                     Read more
                     <RiArrowRightFill />
                   </button>

@@ -84,7 +84,7 @@ function BuyFromCream({ subcategory, route }) {
         </button>
       </div>
       <ul
-        className="flex overflow-x-auto w-[100%] no-scrollbar gap-0 sm:space-x-4"
+        className="flex overflow-x-auto w-[100%] no-scrollbar gap-6 sm:space-x-4"
         ref={containerRef}
       >
         {data?.map((item) => (

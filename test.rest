@@ -1,4 +1,5 @@
-GET https://cream-v2.onrender.com/api/v2/category
+
+GET https://cream-v2.onrender.com/api/v2/listing/?page=1&category=cars&subcategory=65ee06dff248d3d43f8fda49
 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTcwMTI4Y2Q1OGVmZTllNzkxM2QxOCIsImlhdCI6MTcwODU5Njk3NCwiZXhwIjoxNzA4NjgzMzc0fQ.t6hVpI0wqSfVMIlUvl9B3BhXcy_wJTxOqU1X21FBgb4
 

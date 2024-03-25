@@ -59,8 +59,8 @@ function EachBlog() {
             <p className="text-primary1 font-[800] w-full text-center">
               posted on {new Date(article.createdAt).toLocaleString()}
             </p>
-            <div className="w-full h-[100vh] object-contain">
-              <img src={article.cover} className="w-full h-full rounded-md" />
+            <div className="w-full h-[90vh] sm:h-[50vh] object-contain">
+              <img src={article.cover} className="w-full h-full  rounded-md" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-1  my-8 items-center mx-xPadding">
